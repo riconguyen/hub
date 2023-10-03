@@ -7,18 +7,18 @@
 </div>
 
     <ul class="nav ml-1 mt-0">
-        <li class="nav-item "><a class="nav-link" ng-class="selectedReport=='quantity'?'disabled':''"
+        <li class="nav-item " ng-if="entity.VIEW_REPORT_QUANTITY"><a class="nav-link" ng-class="selectedReport=='quantity'?'disabled':''"
                                  ng-click="viewReport('quantity');"
                                  href="">{{'REPORT.NAV.QUANTITY'|translate}}</a></li>
-        <li class="nav-item"><a class="nav-link" ng-class="selectedReport=='flow'?'disabled':''"
+        <li class="nav-item" ng-if="entity.VIEW_REPORT_FLOW"><a class="nav-link" ng-class="selectedReport=='flow'?'disabled':''"
                                 ng-click="viewReport('flow');" href="">{{'REPORT.NAV.FLOW'|translate}}</a></li>
-        <li class="nav-item"><a class="nav-link" ng-class="selectedReport=='customer'?'disabled':''"
+        <li class="nav-item"  ng-if="entity.VIEW_REPORT_CUSTOMER"><a class="nav-link" ng-class="selectedReport=='customer'?'disabled':''"
                                 ng-click="viewReport('customer');"
                                 href="">{{'REPORT.NAV.CUSTOMER'|translate}}</a></li>
-        <li class="nav-item"><a class="nav-link" ng-class="selectedReport=='monthly_audit'?'disabled':''"
+        <li class="nav-item"  ng-if="entity.VIEW_REPORT_MONTHLY_DESTINATION"><a class="nav-link" ng-class="selectedReport=='monthly_audit'?'disabled':''"
                                 ng-click="viewReport('monthly_audit');"
                                 href="">Thống kê ngày</a></li>
-        <li class="nav-item"><a class="nav-link" ng-class="selectedReport=='detail_audit'?'disabled':''"
+        <li class="nav-item"  ng-if="entity.VIEW_REPORT_DETAIL"><a class="nav-link" ng-class="selectedReport=='detail_audit'?'disabled':''"
                                 ng-click="viewReport('detail_audit');"
                                 href="">Chi tiết</a></li>
         
@@ -52,7 +52,7 @@
                     <th class="text-right">Dung lượng</th>
                     <th class="text-right">Doanh thu <sup class="text-muted"  >đ</sup></th>
                 </tr>
-                <tr ng-repeat="data in report.quantity.fee">
+                <tr ng-repeat="data in report.quantity.fee" ng-if="data.unit !='sms'">
                     <td>{{'REPORT.QUANTITY.'+data.name|translate}} <sup class="text-muted" ng-if="data.count">{{data.unit}}</sup></td>
                     <td class="text-right"  >{{data.count|number:0}}
                     </td>

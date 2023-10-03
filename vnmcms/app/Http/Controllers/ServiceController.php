@@ -669,12 +669,11 @@
         $data['prefix_type_id'] = $lastID;
       }
 
-      if ($request->prefix_group && $request->prefix_type_id && $request->prefix_type_id > -1) {
-        $prefixName = ServicePrefixTypeName::find($request->prefix_type_id)->first();
-        $prefixName->prefix_group = $request->prefix_group;
-
-        $prefixName->save();
-      }
+//      if ($request->prefix_group && $request->prefix_type_id && $request->prefix_type_id > -1) {
+//        $prefixName = ServicePrefixTypeName::where('prefix_type_id',$request->prefix_type_id)->first();
+//        $prefixName->prefix_group = $request->prefix_group;
+//        $prefixName->save();
+//      }
 
       if ($request->id) {
         if (DB::table("service_prefix_type")->where('service_config_id', $request->service_config_id)->where('priority', $request->priority)->where('id', '<>', $request->id)->exists()) {

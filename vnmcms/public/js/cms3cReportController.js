@@ -394,7 +394,7 @@ $scope.viewReport= function (data) {
 			return;
 		}
         let postData= new Set();
-	    postData.start_date= moment(query.start_date).format("YYYY-MM-DD HH:mm:ss");
+	    postData.start_date= moment(query.start_date).format("YYYY-MM-DD 00:00:00");
 	    postData.end_date= moment(query.end_date).format("YYYY-MM-DD HH:mm:ss");
 	    postData.prefix_group= query.prefix_group;
 	    postData.enterprise_number= query.enterprise_number;
@@ -418,7 +418,7 @@ $scope.viewReport= function (data) {
             return;
         }
         let postData= new Set();
-	    postData.start_date= moment(query.start_date).format("YYYY-MM-DD HH:mm:ss");
+	    postData.start_date= moment(query.start_date).format("YYYY-MM-DD 00:00:00");
 	    postData.end_date= moment(query.end_date).format("YYYY-MM-DD HH:mm:ss");
 	    postData.prefix_group= query.prefix_group;
 	    postData.enterprise_number= query.enterprise_number;

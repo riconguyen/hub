@@ -105,7 +105,7 @@ class ReportController extends Controller
 
         }
 
-        $sql .= " AND cus_id in (select id from customer_ams where user_id=? ) ";
+        $sql .= " AND cus_id in (select cus_id from customer_ams where user_id=? ) ";
         array_push($params, $user->id);
       }
 
@@ -715,6 +715,7 @@ where insert_time between ? and ?  ";
 
   }
   function secondsToTime($seconds) {
+      return $seconds;
     $hours = floor($seconds / 3600);
     $minutes = floor(($seconds % 3600) / 60);
     $seconds = $seconds % 60;

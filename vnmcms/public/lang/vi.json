@@ -323,7 +323,7 @@
     "10":"Admin chặn 2 chiều",
     "11":"Admin chặn gọi ra",
     "12":"Admin chặn gọi vào",
-    "13":"BCCS Api chặn 2 chiều",
+    "13":"Chặn Spam",
     "14":"Payment chặn 2 chiều"
   },
   "SIP_ERRORCODE":{
