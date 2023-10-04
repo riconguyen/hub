@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\CustomerAms;
 use App\Customers;
+use function date_format;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -492,8 +493,8 @@ on a.full_time= b.day
       'enterprise_number' => 'required'
     ]);
     $start_date= request('start_date', date('Y-m-01 00:00:00'));
-    $end_date= request('end_date', date('Y-m-d H:i:s'));
-
+    $end_date= request('end_date', date('Y-m-d 23:59:59'));
+    $end_date= date_format(new DateTime($end_date), 'Y-m-d 23:59:59');
     $enterprise= request('enterprise_number',null);
     $prefix_group= request('prefix_group',null);
     $checkCus= false;
@@ -529,7 +530,7 @@ on a.full_time= b.day
     }
 
     $params=[$start_date,$end_date];
-    $sql="select sum(amount) total_amount, sum(count) total_duration, count(1) total_call,  date(insert_time) day from charge_log where insert_time between ? and ?  ";
+    $sql="select sum(amount) total_amount, sum(count) total_duration, count(1) total_call,  date(insert_time) day from charge_log where insert_time between ? and ?  and charge_status= 1  ";
     if($isAm)
     {
       $sql .=" AND cus_id in (select cus_id from customer_ams where user_id=?) ";
@@ -607,7 +608,8 @@ on a.full_time= b.day
       'prefix_group' => 'nullable|int'
     ]);
     $start_date= request('start_date', date('Y-m-01 00:00:00'));
-    $end_date= request('end_date', date('Y-m-d H:i:s'));
+    $end_date= request('end_date', date('Y-m-d 23:59:59'));
+    $end_date= date_format(new DateTime($end_date), 'Y-m-d 23:59:59');
 
 
     $totalPerPage= request('count',500);
@@ -662,7 +664,7 @@ where insert_time between '2022-10-01 00:00:00' and '2022-12-30 14:12:25'   grou
     $params=[$start_date,$end_date];
     $sql="select sum(amount) total_amount, sum(count) total_duration, count(1) total_call,  date(insert_time) day, ifNULL(prefix_type_name.name,\"sub\") prefixName from charge_log
 left join prefix_type_name on prefix_type_name.prefix_type_id= destination_type
-where insert_time between ? and ?  ";
+where insert_time between ? and ?  and charge_status= 1  ";
     if($isAm)
     {
       $sql .=" AND cus_id in (select cus_id from customer_ams where user_id=?) ";

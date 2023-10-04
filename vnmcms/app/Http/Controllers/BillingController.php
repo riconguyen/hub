@@ -402,9 +402,9 @@ class BillingController extends Controller
             $datePeriod->start_date = date('Y-m-d 00:00:00', strtotime($request->start_date));
         }
         if (!$request->end_date) {
-            $datePeriod->end_date = date('Y-m-d H:i:s');
+            $datePeriod->end_date = date('Y-m-d 23:59:59');
         } else {
-            $datePeriod->end_date = date('Y-m-d H:i:s', strtotime($request->end_date));
+            $datePeriod->end_date = date('Y-m-d 23:59:59', strtotime($request->end_date));
         }
 //        return json_encode($datePeriod);
        $enterprise = $this->removeZero($id); //
