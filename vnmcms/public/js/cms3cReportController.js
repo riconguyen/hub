@@ -339,6 +339,8 @@ $scope.viewReport= function (data) {
         $scope.queryDetail= {};
         $scope.queryDetail.start_date= new Date();
         $scope.queryDetail.end_date= new Date();
+        $scope.queryDetail.enterprise_number= "0968000010";
+        $scope.queryDetail.billing_month=moment().subtract(1, 'months').format("YYYY-MM-01");
         $scope.queryDetail.prefix_group=null;
 		// $scope.searchReportGrowth($scope.queryDetail);
         ApiServices.getServiceZoneQuantityType().then(result=>{
@@ -432,12 +434,66 @@ $scope.viewReport= function (data) {
 
     }
 
+    $scope.searchReportBilling=(query)=>{
+		console.log("Data info ", query);
+
+		let postData={enterprise_number:query.enterprise_number};
+		postData.billing_month= moment(query.billing_month).format("YYYY-MM-01 00:00:00");
+        console.log("PostData info ", postData);
+
+        if(!postData.enterprise_number)
+        {
+            $.jGrowl("Số đại diện bắt buộc nhập",{theme:'error'})
+            return;
+        }if(!postData.billing_month)
+        {
+            $.jGrowl("Bạn chưa chọn tháng",{theme:'error'})
+            return;
+        }
+        if( (query.billing_month).isAfter(moment()))
+		{
+            $.jGrowl("Tháng cước đang truy xuất ở tương lai",{theme:'error'})
+            return;
+		}
+
+        ApiServices.searchReportMonthBilling(postData).then(res=>{
+
+            let renderResult= res.data;
+
+
+
+            $scope.searchReportBillingData= renderResult
+
+        },reason => {
+            $.jGrowl(reason.data.message,{theme:'error'})
+        })
+	}
+
 });
 
 
+// function htmlTableToExcel(type, obj){
+// 	var data = document.getElementById(obj);
+//
+// 	let tableName='Sheet1';
+// 	var excelFile = XLSX.utils.table_to_book(data, {sheet: tableName});
+//     const sheet = excelFile.Sheets[tableName];
+//     sheet['A1'].s = { font: { sz: 14 } };
+//
+// 	XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
+//
+// 	XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
+// }
+
 function htmlTableToExcel(type, obj){
-	var data = document.getElementById(obj);
-	var excelFile = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
-	XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
-	XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
+    var data = document.getElementById(obj);
+
+    let tableName = 'Sheet1';
+    var excelFile = XLSX.utils.table_to_book(data, {sheet: tableName});
+
+    var excelBase64 = XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
+
+   XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
+
+
 }

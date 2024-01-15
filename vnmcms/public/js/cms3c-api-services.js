@@ -229,6 +229,10 @@ cms3c.factory('ApiServices', function($http,loginCheck){
             return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/searchReportAudit', data:data});
             // return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/'+report, data:data});
         },
+        searchReportMonthBilling:function (data) {
+            return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/searchReportMonthBilling', data:data});
+            // return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/'+report, data:data});
+        },
 
         // Server config
 

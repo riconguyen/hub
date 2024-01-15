@@ -662,7 +662,7 @@
 
         $prefixName = new  ServicePrefixTypeName();
         $prefixName->prefix_type_id = $lastID;
-        $prefixName->prefix_group = $request->prefix_group;
+//        $prefixName->prefix_group = $request->prefix_group;
         $prefixName->name = $request->prefix_type_name;
         $prefixName->save();
 

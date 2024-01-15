@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\CustomerAms;
 use App\Customers;
+use App\Hotlines;
 use function date_format;
 use DateTime;
 use Illuminate\Http\Request;
@@ -707,15 +708,114 @@ where insert_time between ? and ?  and charge_status= 1  ";
       $item->total_duration= $this->secondsToTime($item->total_duration);
     }
 
-
-
-
-
-
-
     return response()->json(['data'=>$res, 'count'=>$total[0]->total, 'summary'=>$dataSummary],200);
 
   }
+  public function searchReportMonthBilling(Request $request)
+  {
+    $user = $request->user;
+
+    if (!$this->checkEntity($user->id, "VIEW_REPORT_DETAIL")) {
+      Log::info($user->email . '  TRY TO GET ReportController.postSearchReportGrowth WITHOUT PERMISSION');
+      return response()->json(['status' => false, 'message' => "Permission denied"], 403);
+    }
+
+    $isAm = $this->checkEntity($user->id, "AM");
+    if ($isAm) {
+      $checkCusAms = CustomerAms::where('user_id', $user->id)->count();
+
+      if ($checkCusAms == 0) {
+        return $this->ApiReturn([], true, 'No AM found', 400);
+      }
+    }
+    $validatedData = $request->validate([
+      'billing_month' => 'required|date',
+
+      'enterprise_number' => 'required',
+      'prefix_group' => 'nullable|int'
+    ]);
+    $start_date= request('billing_month', date('Y-m-01 00:00:00'));
+    $end_date = date('Y-m-t 23:59:59', strtotime($start_date));
+
+    $totalPerPage= request('count',500);
+    $page= request('page',1);
+    $skip= ($page-1)*$totalPerPage;
+
+
+
+
+
+    $enterprise= request('enterprise_number',null);
+    $enterpriseNoZero= $this->removeZero($enterprise);
+
+    $checkCus= false;
+    if($enterprise)
+    {
+      $checkCus= Customers::where('enterprise_number', $enterprise)->whereIn('blocked',[0,1])->first();
+      if(!$checkCus)
+      {
+        return $this->ApiReturn([], true, 'Không tìm thấy khách hàng '.$enterprise, 400);
+      }
+
+    }
+
+
+    $callPriceConfig= DB::table('call_fee_config')->where('type', $checkCus->service_id)->get();
+
+
+    $start_datex = new DateTime($start_date);
+    $end_datex = new DateTime($end_date);
+
+    $interval = $start_datex->diff($end_datex);
+
+    if ($interval->days > 31) {
+      return $this->ApiReturn([], true, 'Thời gian bắt đầu và kết thúc không quá 31 ngày', 422);
+
+    }
+
+
+    $totalHotlineAvail= Hotlines::where('cus_id',$checkCus->id)
+        ->whereIn('status',[0,1])->count();
+
+    $params=[$enterpriseNoZero, $start_date,$end_date, ];
+    $sql="SELECT prefix_type_name.name,   call_fee_cycle_status.* FROM call_fee_cycle_status LEFT JOIN prefix_type_name ON prefix_type_name.prefix_type_id= call_fee_cycle_status.`type` WHERE   enterprise_number =?   and  cycle_from BETWEEN ? AND ?  ";
+
+      $sqlSub= "select total_amount, cycle_from , cycle_to, updated_at from subcharge_fee_cycle_status
+ where enterprise_number=?  and cycle_from >=? and cycle_from < ? ";
+
+
+
+      $subAmount= DB::select($sqlSub, $params);
+      $res = DB::select($sql, $params);
+
+      $total=0;
+
+      if(count($subAmount)>0)
+      {
+
+          $total= $total+ intval($subAmount[0]->total_amount);
+      }
+      if(count($res)>0)
+      {
+          foreach ($res as $item)
+          {
+              $total= $total+intval($item->total_amount);
+          }
+      }
+
+      $dataSummary = new stdClass();
+      $dataSummary->totalbeforetax= $total;
+      $dataSummary->date_print= date("D-M-Y H:i:s");
+
+      $dataSummary->sub = count($subAmount) > 0 ? $subAmount[0] : new stdClass();
+      $dataSummary->sub->total_hotline=$totalHotlineAvail;
+
+
+    return response()->json(['data'=>$res, 'sql'=>$sql, 's'=>$callPriceConfig,   'date'=>['start_date'=>$start_date, 'end_date'=>$end_date], 'sum'=>$dataSummary,  'sub'=>$dataSummary->sub,'customer'=>$checkCus],200);
+
+  }
+
+
   function secondsToTime($seconds) {
       return $seconds;
     $hours = floor($seconds / 3600);
