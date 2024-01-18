@@ -789,6 +789,7 @@ where insert_time between ? and ?  and charge_status= 1  ";
       $res = DB::select($sql, $params);
 
       $total=0;
+      $total_call=0;
 
       if(count($subAmount)>0)
       {
@@ -800,18 +801,20 @@ where insert_time between ? and ?  and charge_status= 1  ";
           foreach ($res as $item)
           {
               $total= $total+intval($item->total_amount);
+              $total_call= $total_call+intval($item->total_amount);
           }
       }
 
       $dataSummary = new stdClass();
       $dataSummary->totalbeforetax= $total;
+      $dataSummary->total_call= $total_call;
       $dataSummary->date_print= date("D-M-Y H:i:s");
 
       $dataSummary->sub = count($subAmount) > 0 ? $subAmount[0] : new stdClass();
       $dataSummary->sub->total_hotline=$totalHotlineAvail;
 
 
-    return response()->json(['data'=>$res, 'sql'=>$sql, 's'=>$callPriceConfig,   'date'=>['start_date'=>$start_date, 'end_date'=>$end_date], 'sum'=>$dataSummary,  'sub'=>$dataSummary->sub,'customer'=>$checkCus],200);
+    return response()->json(['data'=>$res,    'date'=>['start_date'=>$start_date, 'end_date'=>$end_date], 'sum'=>$dataSummary,  'sub'=>$dataSummary->sub,'customer'=>$checkCus],200);
 
   }
 

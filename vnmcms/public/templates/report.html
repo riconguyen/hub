@@ -496,19 +496,21 @@
                         <!--<button class="btn btn-default" ng-click="searchExportReportGrowth(queryDetail)">Xuất dữ liệu</button>-->
                         <button class="btn btn-default" ng-disabled="!searchReportBillingData|| !searchReportBillingData.customer"
                                 onclick="htmlTableToExcel('xlsx','auditBilling')">Export  </button>
+                        <button class="btn btn-default" ng-disabled="!searchReportBillingData|| !searchReportBillingData.customer"
+                                onclick="exportDoc('auditBillingDoc')">Export Docs  </button>
                     </div>
                 </div>
 
 
-                <div class="card-body">
+                <div class="card-body" id="auditBillingDoc" >
                     <table class="table small" id="auditBilling" ng-show="searchReportBillingData.customer">
                         <tbody>
-                        <tr><td colspan="7" >CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</td></tr>
-                        <tr><td colspan="7">Độc lập - Tự do - Hạnh phúc</td></tr>
-                        <tr><td colspan="7">--------o0o---------</td></tr>
-                <tr><td colspan="7">BIÊN BẢN ĐỐI SOÁT</td></tr>
-                <tr><td colspan="7">DỊCH VỤ SIP TRUNK/ VOICE BRANDNAME</td></tr>
-                <tr><td colspan="7">Giữa Công Ty Cổ Phần Giải Pháp Công Nghệ Thông Tin Quốc Tế và {{searchReportBillingData.customer.companyname}} theo hợp đồng số: …/2023/HĐ-…/ITS-…)</td></tr>
+                        <tr><td colspan="7" style="text-align: center">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</td></tr>
+                        <tr><td colspan="7" style="text-align: center">Độc lập - Tự do - Hạnh phúc</td></tr>
+                        <tr><td colspan="7" style="text-align: center">--------o0o---------</td></tr>
+                <tr><td colspan="7" style="text-align: center; font-size: 15pt;">BIÊN BẢN ĐỐI SOÁT</td></tr>
+                <tr><td colspan="7" style="text-align: center; font-size: 15pt;">DỊCH VỤ SIP TRUNK/ VOICE BRANDNAME</td></tr>
+                <tr><td colspan="7" style="text-align: center; ">Giữa Công Ty Cổ Phần Giải Pháp Công Nghệ Thông Tin Quốc Tế và {{searchReportBillingData.customer.companyname}} theo hợp đồng số: …/2023/HĐ-…/ITS-…)</td></tr>
 
 
 
@@ -526,18 +528,18 @@
                         </tr>
                         <tr><td>I.1</td><td  colspan="4">Phí khởi tạo và phí duy trì dịch vụ</td>
                             <td style="text-align: right">{{searchReportBillingData.sub.total_hotline}}</td>
-                            <td style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}} đ</td>
+                            <td style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
                         </tr>
 
                         <tr>
 
                                 <th> STT</th>
-                                <th colspan="3"> Phí cuộc gọi CSKH<br>
+                                <th colspan="3" style="text-align: left"> Phí cuộc gọi CSKH<br>
                                     Hướng cuộc gọi( Block 6s+1 và 1s +1)</th>
 
                                 <th> Phút gọi tính cước</th>
-                                <th> Đơn giá/ phút (VND</th>
-                                <th> Thành tiền thực tế   (VND)</th>
+                                <th> Đơn giá/ phút (VND)</th>
+                                <th> Thành tiền thực tế  (VND)</th>
 
 
                         </tr>
@@ -556,17 +558,40 @@
 
                         </tr>
                         <tr>
-                            <th colspan="3">TỔNG II</th> <th colspan="4"></th>
+                            <td colspan="5" style="text-align: left">TỔNG II (VND)</td>
+                            <td colspan="2" style="text-align: right">   {{searchReportBillingData.sum.total_call|number:0}}</td>
                         </tr>
 
                         <tr>
-                            <th colspan="3">TỔNG TIỀN TRƯỚC THUẾ (I + II)</th>
-                            <th colspan="4" style="text-align: right">{{searchReportBillingData.sum.totalbeforetax|number:0}}</th>  </tr>
-                        <tr>    <th colspan="3">THUẾ GTGT (10%)</th> <th colspan="4"></th>  </tr>
-                        <tr>     <th colspan="3">TỔNG CỘNG TIỀN THANH TOÁN</th> <th colspan="4"></th>
+                            <td colspan="5" style="text-align: left">TỔNG TIỀN TRƯỚC THUẾ (I + II) (VND) </td>
+                            <td colspan="2" style="text-align: right">
+                                {{searchReportBillingData.sum.totalbeforetax|number:0}}
+                            </td>
                         </tr>
-                        <tr><td colspan="7" style="text-align: right">Bằng chữ:              đồng./.                        </td></tr>
-                        <tr><td colspan="7" style="text-align: right">Công ty Cổ phần Giải pháp Công nghệ thông tin Quốc tế</td></tr>
+                        <tr>
+                            <td colspan="5" style="text-align: left">THUẾ GTGT (10%) (VND)</td>
+                            <td colspan="2"  style="text-align: right">{{searchReportBillingData.tax|number:1}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: left">TỔNG CỘNG TIỀN THANH TOÁN (VND)</td>
+                            <td colspan="2" style="text-align: right;">
+                                {{searchReportBillingData.sum.totalbeforetax +((searchReportBillingData.sum.totalbeforetax/100)*searchReportBillingData.tax_radio)|number:0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" style="text-align: right; padding: 17pt;">
+                                <div style="width: 422px;
+    display: flex;
+    justify-content: space-between;
+    float: right;
+}"><span>Bằng chữ:</span><span>(đồng)</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" style="text-align: right; padding: 17pt">Công ty Cổ phần Giải pháp Công nghệ thông tin Quốc
+                                tế
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
 
