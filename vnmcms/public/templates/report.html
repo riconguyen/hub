@@ -498,6 +498,7 @@
                                 onclick="htmlTableToExcel('xlsx','auditBilling')">Export  </button>
                         <button class="btn btn-default" ng-disabled="!searchReportBillingData|| !searchReportBillingData.customer"
                                 onclick="exportDoc('auditBillingDoc')">Export Docs  </button>
+
                     </div>
                 </div>
 
@@ -527,7 +528,7 @@
                             <th> Thành tiền (VND)</th>
                         </tr>
                         <tr><td>I.1</td><td  colspan="4">Phí khởi tạo và phí duy trì dịch vụ</td>
-                            <td style="text-align: right">{{searchReportBillingData.sub.total_hotline}}</td>
+                            <td style="text-align: right"></td>
                             <td style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
                         </tr>
 

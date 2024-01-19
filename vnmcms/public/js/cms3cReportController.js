@@ -489,14 +489,27 @@ $scope.viewReport= function (data) {
 // }
 
 function htmlTableToExcel(type, obj){
-    var data = document.getElementById(obj);
 
+    var tbl = document.getElementsByTagName(obj)[0];
     let tableName = 'Sheet1';
-    var excelFile = XLSX.utils.table_to_book(data, {sheet: tableName});
+
+
+    var ws = XLSX.utils.table_to_sheet(tbl, {display: true})
+
+
+    const sheet = excelFile.Sheets[tableName];
+
+    // Thiết lập cỡ chữ và căn giữa cho ô A1
+    sheet['A1'].s = {
+        font: { sz: 16 }, // Đặt kích thước chữ là 16
+        alignment: { horizontal: 'center', vertical: 'center' } // Căn giữa ô
+    };
+
+
 
     var excelBase64 = XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
 
-   XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
+   XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type,{cellStyles: true});
 
 
 }
