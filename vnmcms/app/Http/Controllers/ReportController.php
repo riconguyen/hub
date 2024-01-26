@@ -794,14 +794,15 @@ where insert_time between ? and ?  and charge_status= 1  ";
       if(count($subAmount)>0)
       {
 
-          $total= $total+ intval($subAmount[0]->total_amount);
+          $total= $total+ intval($subAmount[0]->total_amount)/1.1;
       }
       if(count($res)>0)
       {
           foreach ($res as $item)
           {
+              $item->total_amount= intval($item->total_amount/1.1);
               $total= $total+intval($item->total_amount);
-              $total_call= $total_call+intval($item->total_amount);
+              $total_call= $total_call+intval($item->total_duration);
           }
       }
 

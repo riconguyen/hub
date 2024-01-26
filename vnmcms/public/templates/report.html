@@ -519,28 +519,26 @@
                             <td colspan="6"> Kỳ đối soát: Từ ngày {{searchReportBillingData.date.start_date}} đến ngày {{searchReportBillingData.date.start_date}} </td>
                         </tr>
                         <tr>
-                            <td>II.</td>
-                            <td colspan="6"> Chi tiết đối soát dịch vụ:</td>
+                            <td   >II.</td>
+                            <td    colspan="6"> Chi tiết đối soát dịch vụ:</td>
                         </tr>
-                        <tr><th>STT</th>
-                            <th colspan="4">Phí khởi tạo và phí duy trì dịch vụ</th>
-                            <th>Số lượng thuê bao/ tháng</th>
-                            <th> Thành tiền (VND)</th>
+                        <tr><th  class="tdborder">STT</th>
+                            <th  class="tdborder" colspan="5">Phí khởi tạo và phí duy trì dịch vụ</th>
+                            <th  class="tdborder"> Thành tiền (VND)</th>
                         </tr>
-                        <tr><td>I.1</td><td  colspan="4">Phí khởi tạo và phí duy trì dịch vụ</td>
-                            <td style="text-align: right"></td>
-                            <td style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
+                        <tr><td  class="tdborder">I.1</td>
+                            <td  class="tdborder"  colspan="5">Phí khởi tạo và phí duy trì dịch vụ</td>
+                            <td  class="tdborder" style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
                         </tr>
-
                         <tr>
 
-                                <th> STT</th>
-                                <th colspan="3" style="text-align: left"> Phí cuộc gọi CSKH<br>
+                               <th class="tdborder"> STT</th>
+                                <th  class="tdborder" colspan="3" style="text-align: left"> Phí cuộc gọi CSKH<br>
                                     Hướng cuộc gọi( Block 6s+1 và 1s +1)</th>
 
-                                <th> Phút gọi tính cước</th>
-                                <th> Đơn giá/ phút (VND)</th>
-                                <th> Thành tiền thực tế  (VND)</th>
+                                <th  class="tdborder"> Phút gọi tính cước</th>
+                                <th  class="tdborder"> Đơn giá/ phút (VND)</th>
+                                <th  class="tdborder"> Thành tiền thực tế  (VND)</th>
 
 
                         </tr>
@@ -548,35 +546,33 @@
 
                         <tr ng-repeat="bill in searchReportBillingData.data ">
 
-                            <td>II.{{$index+1}}</td>
-
-                            <td colspan="3"> {{bill.name}} </td>
-                            <td style="text-align: right"> {{bill.total_duration|number:0}} </td>
-
-                            <td style="text-align: right"> {{(bill.total_amount/bill.total_duration)|number:0}} </td>
-                            <td style="text-align: right"> {{bill.total_amount|number:0}} </td>
+                            <td  class="tdborder">II.{{$index+1}}</td>
+                            <td  class="tdborder" colspan="3"> {{bill.name}} </td>
+                            <td  class="tdborder" style="text-align: right"> {{bill.total_duration|number:0}} </td>
+                            <td  class="tdborder" style="text-align: right"> {{(bill.total_amount/bill.total_duration)|number:0}} </td>
+                            <td  class="tdborder" style="text-align: right"> {{bill.total_amount|number:0}} </td>
 
 
                         </tr>
                         <tr>
-                            <td colspan="5" style="text-align: left">TỔNG II (VND)</td>
-                            <td colspan="2" style="text-align: right">   {{searchReportBillingData.sum.total_call|number:0}}</td>
+                            <td  class="tdborder" colspan="5" style="text-align: left">TỔNG II (VND)</td>
+                            <td  class="tdborder" colspan="2" style="text-align: right">   {{searchReportBillingData.sum.total_call|number:0}}</td>
                         </tr>
 
                         <tr>
-                            <td colspan="5" style="text-align: left">TỔNG TIỀN TRƯỚC THUẾ (I + II) (VND) </td>
-                            <td colspan="2" style="text-align: right">
+                            <td class="tdborder" colspan="5" style="text-align: left">TỔNG TIỀN TRƯỚC THUẾ (I + II) (VND) </td>
+                            <td class="tdborder" colspan="2" style="text-align: right">
                                 {{searchReportBillingData.sum.totalbeforetax|number:0}}
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5" style="text-align: left">THUẾ GTGT (10%) (VND)</td>
-                            <td colspan="2"  style="text-align: right">{{searchReportBillingData.tax|number:1}}</td>
+                            <td  class="tdborder" colspan="5" style="text-align: left">THUẾ GTGT (10%) (VND)</td>
+                            <td  class="tdborder" colspan="2"  style="text-align: right">{{searchReportBillingData.tax|number:0}}</td>
                         </tr>
                         <tr>
-                            <td colspan="5" style="text-align: left">TỔNG CỘNG TIỀN THANH TOÁN (VND)</td>
-                            <td colspan="2" style="text-align: right;">
-                                {{searchReportBillingData.sum.totalbeforetax +((searchReportBillingData.sum.totalbeforetax/100)*searchReportBillingData.tax_radio)|number:0}}
+                            <td  class="tdborder" colspan="5" style="text-align: left">TỔNG CỘNG TIỀN THANH TOÁN (VND)</td>
+                            <td  class="tdborder" colspan="2" style="text-align: right;">
+                                {{(searchReportBillingData.sum.totalbeforetax +searchReportBillingData.tax)|number:0}}
                             </td>
                         </tr>
                         <tr>
@@ -625,7 +621,7 @@
 
 
 <style>
-    
+    .tdborder{    border-right: 1px solid #dee2e6;}
     .statics-box .border{
         width: calc((100vw/5) - 17px);
         min-width: 200px;
