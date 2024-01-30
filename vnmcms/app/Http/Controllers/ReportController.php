@@ -777,6 +777,24 @@ where insert_time between ? and ?  and charge_status= 1  ";
     $totalHotlineAvail= Hotlines::where('cus_id',$checkCus->id)
         ->whereIn('status',[0,1])->count();
 
+    $callPrice= "select  distinct(call_fee_config.type),  call_fee_config.call_fees  from service_prefix_type 
+join  call_fee_config on call_fee_config.`type`= service_prefix_type.prefix_type_id
+where call_fee_config.service_config_id= ?  order by updated_at desc
+
+";
+
+    $priceConfig= DB::select($callPrice,[$checkCus->service_id]);
+    $priceByPrefix=new stdClass();
+
+    if(count($priceConfig)>0)
+    {
+        foreach ($priceConfig as $item)
+        {
+            $priceByPrefix->{$item->type}= $item->call_fees;
+        }
+    }
+
+
     $params=[$enterpriseNoZero, $start_date,$end_date, ];
     $sql="SELECT prefix_type_name.name,   call_fee_cycle_status.* FROM call_fee_cycle_status LEFT JOIN prefix_type_name ON prefix_type_name.prefix_type_id= call_fee_cycle_status.`type` WHERE   enterprise_number =?   and  cycle_from BETWEEN ? AND ?  ";
 
@@ -790,6 +808,7 @@ where insert_time between ? and ?  and charge_status= 1  ";
 
       $total=0;
       $total_call=0;
+      $call_fee_amount=0;
 
       if(count($subAmount)>0)
       {
@@ -801,14 +820,18 @@ where insert_time between ? and ?  and charge_status= 1  ";
           foreach ($res as $item)
           {
               $item->total_amount= intval($item->total_amount/1.1);
+              $item->total_duration= intval($item->total_duration/60);
+              $item->price= ((isset($priceByPrefix->{$item->type})?$priceByPrefix->{$item->type}:0)*60)/1.1;
               $total= $total+intval($item->total_amount);
               $total_call= $total_call+intval($item->total_duration);
+              $call_fee_amount= $call_fee_amount+intval($item->total_amount);
           }
       }
 
       $dataSummary = new stdClass();
       $dataSummary->totalbeforetax= $total;
       $dataSummary->total_call= $total_call;
+      $dataSummary->call_fee_amount= $call_fee_amount;
       $dataSummary->date_print= date("D-M-Y H:i:s");
 
       $dataSummary->sub = count($subAmount) > 0 ? $subAmount[0] : new stdClass();

@@ -523,11 +523,18 @@
                             <td    colspan="6"> Chi tiết đối soát dịch vụ:</td>
                         </tr>
                         <tr><th  class="tdborder">STT</th>
-                            <th  class="tdborder" colspan="5">Phí khởi tạo và phí duy trì dịch vụ</th>
+                            <th  class="tdborder" colspan="4">Phí khởi tạo và phí duy trì dịch vụ</th>
+                            <th  class="tdborder">SL Thuê bao </th>
                             <th  class="tdborder"> Thành tiền (VND)</th>
                         </tr>
                         <tr><td  class="tdborder">I.1</td>
-                            <td  class="tdborder"  colspan="5">Phí khởi tạo và phí duy trì dịch vụ</td>
+                            <td  class="tdborder"  colspan="4">Phí khởi tạo </td>
+                            <td  class="tdborder"  style="text-align: right"></td>
+                            <td  class="tdborder" style="text-align: right"></td>
+                        </tr>
+                        <tr><td  class="tdborder">I.2</td>
+                            <td  class="tdborder"  colspan="4">Phí duy trì dịch vụ</td>
+                            <td  class="tdborder"  style="text-align: right"></td>
                             <td  class="tdborder" style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
                         </tr>
                         <tr>
@@ -549,14 +556,14 @@
                             <td  class="tdborder">II.{{$index+1}}</td>
                             <td  class="tdborder" colspan="3"> {{bill.name}} </td>
                             <td  class="tdborder" style="text-align: right"> {{bill.total_duration|number:0}} </td>
-                            <td  class="tdborder" style="text-align: right"> {{(bill.total_amount/bill.total_duration)|number:0}} </td>
+                            <td  class="tdborder" style="text-align: right"> {{(bill.price)|number:3}} </td>
                             <td  class="tdborder" style="text-align: right"> {{bill.total_amount|number:0}} </td>
 
 
                         </tr>
                         <tr>
                             <td  class="tdborder" colspan="5" style="text-align: left">TỔNG II (VND)</td>
-                            <td  class="tdborder" colspan="2" style="text-align: right">   {{searchReportBillingData.sum.total_call|number:0}}</td>
+                            <td  class="tdborder" colspan="2" style="text-align: right">   {{searchReportBillingData.sum.call_fee_amount|number:0}}</td>
                         </tr>
 
                         <tr>

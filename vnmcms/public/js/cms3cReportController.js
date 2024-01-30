@@ -339,7 +339,7 @@ $scope.viewReport= function (data) {
         $scope.queryDetail= {};
         $scope.queryDetail.start_date= new Date();
         $scope.queryDetail.end_date= new Date();
-        $scope.queryDetail.enterprise_number= "0968000010";
+        $scope.queryDetail.enterprise_number= "";
         $scope.queryDetail.billing_month=moment().subtract(1, 'months').format("YYYY-MM-01");
         $scope.queryDetail.prefix_group=null;
 		// $scope.searchReportGrowth($scope.queryDetail);
@@ -475,44 +475,19 @@ $scope.viewReport= function (data) {
 });
 
 
-// function htmlTableToExcel(type, obj){
-// 	var data = document.getElementById(obj);
-//
-// 	let tableName='Sheet1';
-// 	var excelFile = XLSX.utils.table_to_book(data, {sheet: tableName});
-//     const sheet = excelFile.Sheets[tableName];
-//     sheet['A1'].s = { font: { sz: 14 } };
-//
-// 	XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
-//
-// 	XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
-// }
-
 function htmlTableToExcel(type, obj){
+	var data = document.getElementById(obj);
 
-    var tbl = document.getElementsByTagName(obj)[0];
-    let tableName = 'Sheet1';
-
-
-    var ws = XLSX.utils.table_to_sheet(tbl, {display: true})
-
-
+	let tableName='Sheet1';
+	var excelFile = XLSX.utils.table_to_book(data, {sheet: tableName});
     const sheet = excelFile.Sheets[tableName];
+    sheet['A1'].s = { font: { sz: 14 } };
 
-    // Thiết lập cỡ chữ và căn giữa cho ô A1
-    sheet['A1'].s = {
-        font: { sz: 16 }, // Đặt kích thước chữ là 16
-        alignment: { horizontal: 'center', vertical: 'center' } // Căn giữa ô
-    };
+	XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
 
-
-
-    var excelBase64 = XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
-
-   XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type,{cellStyles: true});
-
-
+	XLSX.writeFile(excelFile, obj+'FilExportVconnect.' + type);
 }
+
 
 function exportDoc(obj){
     var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
