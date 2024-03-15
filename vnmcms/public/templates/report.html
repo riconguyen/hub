@@ -524,7 +524,8 @@
                         </tr>
                         <tr><th  class="tdborder">STT</th>
                             <th  class="tdborder" colspan="4">Phí khởi tạo và phí duy trì dịch vụ</th>
-                            <th  class="tdborder">SL Thuê bao </th>
+                            <th  class="tdborder">Số lượng Thuê bao/Tháng</th>
+                            <th  class="tdborder">Đơn giá/Thuê bao (VND)</th>
                             <th  class="tdborder"> Thành tiền (VND)</th>
                         </tr>
                         <tr><td  class="tdborder">I.1</td>
@@ -532,11 +533,19 @@
                             <td  class="tdborder"  style="text-align: right"></td>
                             <td  class="tdborder" style="text-align: right"></td>
                         </tr>
+
+
                         <tr><td  class="tdborder">I.2</td>
                             <td  class="tdborder"  colspan="4">Phí duy trì dịch vụ</td>
                             <td  class="tdborder"  style="text-align: right"></td>
                             <td  class="tdborder" style="text-align: right">{{searchReportBillingData.sub.total_amount|number:0}}</td>
                         </tr>
+                        <tr>
+                            <td  class="tdborder" colspan="5" style="text-align: left">TỔNG I (VND)</td>
+                            <td  class="tdborder" colspan="2" style="text-align: right">   {{searchReportBillingData.sum.total_amount|number:0}}</td>
+                        </tr>
+
+
                         <tr>
 
                                <th class="tdborder"> STT</th>
