@@ -181,6 +181,7 @@ Route::group(['middleware' => ['api', 'cors','logVT']], function () {
             Route::post('/monthly', 'ReportController@postViewReportMonthlyAudit');
             Route::post('/searchReportGrowth', 'ReportController@postSearchReportGrowth');
             Route::post('/searchReportAudit', 'ReportController@postSearchReportAudit');
+            Route::post('/searchReportMonthBilling', 'ReportController@searchReportMonthBilling');
         });
         Route::post('/activity', function (Request $request) {
             $table = $request->input('table');
