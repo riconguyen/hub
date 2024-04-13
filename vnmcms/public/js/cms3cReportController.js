@@ -28,25 +28,70 @@ $scope.monthlyReport={tab:"customer",acumulated:[], count:0,prefix_charge:[]};
 
 	];
 
-$scope.selectDateRange= function (data) {
-    $scope.report.dateRange=data;
-    $scope.reportParam.datePeriod=data;
-    if(!$scope.reportParam.report)
-    {
-        $scope.selectedReport='quantity'; // mặc định là sản lượng
+    $scope.initAmFLowParam = () => {
+        ApiServices.getInitFlowParam().then(
+            result => {
+                console.log("", result);
+                $scope.flowParams= result.data?result.data.data:[];
+
+            },
+            reason => {
+                console.log("", reason);
+            }
+        )
     }
 
-  //  $scope.reportParam.dateRange={};
+    $scope.entityLoaded = false;
+
+    $scope.$watch('entity', function(newValue, oldValue) {
+        if (newValue !== oldValue && newValue !== undefined && !$scope.entityLoaded) {
+            // Do something when 'entity' is loaded
+            $scope.entityLoaded = true;
+            if($scope.entity.AM)
+			{
+                $scope.initAmFLowParam();
+			}
+            $scope.selectDateRange('day');
+            //console.log('Entity has been loaded:', newValue);
+        }
+    });
 
 
-    if(data !='manual')
-    {
-    $scope.viewReport($scope.selectedReport);
+    $scope.selectDateRange = function (data) {
+        $scope.report.dateRange = data;
+        $scope.reportParam.datePeriod = data;
+        if (!$scope.reportParam.report) {
+        	if($scope.entity.AM)
+			{
+                $scope.selectedReport = 'flow'; // mặc định là sản lượng
+			}
+            else
+			{
+                $scope.selectedReport = 'quantity'; // mặc định là sản lượng
+			}
+        }
+
+        //  $scope.reportParam.dateRange={};
+
+
+        if (data != 'manual') {
+            $scope.viewReport($scope.selectedReport);
+        }
+
+
     }
 
 
-}
+    $scope.selectDateRangeFlow = function (data) {
+        $scope.report.dateRange = data;
+        $scope.reportParam.datePeriod = data;
 
+
+
+    }
+    $scope.viewFlowReport=()=>{
+        $scope.viewReport($scope.selectedReport);
+	}
 
 
 $scope.selectDateManual=function () {
@@ -54,6 +99,9 @@ $scope.selectDateManual=function () {
     $scope.viewReport($scope.selectedReport);
 
 }
+
+
+
 
 
 $scope.viewReport= function (data) {
@@ -331,7 +379,7 @@ $scope.viewReport= function (data) {
 			$("#loading").modal("hide");
 		})
 	}
-	$scope.selectDateRange('day');
+
 	$scope.viewDetailAudit = () => {
 		// init audit all
         $scope.subNav='growth';

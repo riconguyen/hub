@@ -213,6 +213,10 @@ cms3c.factory('ApiServices', function($http,loginCheck){
             return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/'+report, data:data});
             // return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/'+report, data:data});
         },
+        getInitFlowParam:function()
+        {
+            return $http({method:'get',headers:headers, url:ApiUrl+'/api/report/int-flow-params'});
+        },
 		postViewMonthlyAudit:function (data) {
             return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/monthly', data:data});
             // return $http({method:'post',headers:headers, url:ApiUrl+'/api/report/'+report, data:data});

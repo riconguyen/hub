@@ -158,54 +158,36 @@ class ReportController extends Controller
 
 
 
-  public function postViewReportFlowBK(Request $request) {
-    $user = $request->user;
-    if (!$this->checkEntity($user->id, "VIEW_REPORT_FLOW")) {
-      Log::info($user->email . '  TRY TO GET ReportController.postViewReportFlow WITHOUT PERMISSION');
-      return response()->json(['status' => false, 'message' => "Permission denied"], 403);
+    public function getInitFLowReportParam()
+    {
+        $user = request()->user();
+
+
+        $lstOperatorType = DB::table("prefix_type_name")->select("prefix_type_id as id", 'name', 'prefix_group')->get();
+        $isAm=$this->checkEntity($user->id, "AM");
+        if($isAm) {
+            $checkCusAms = DB::select("
+select id, cus_name, enterprise_number from customers 
+where id in (select cus_id from customer_ams where user_id=? )",[$user->id]);
+            if (count($checkCusAms) == 0) {
+                return $this->ApiReturn(['data' => [], 'count' => 0], true, 'No Customer found', 200);
+            }
+
+            foreach ($checkCusAms as $am) {
+                $lstCusId[] = $am->id;
+            }
+
+            $returnObj= new stdClass();
+            $returnObj->customers= $checkCusAms;
+            $returnObj->operators= $lstOperatorType;
+            return $this->ApiReturn($returnObj, true, null,  200);
+
+        }
+
+
+        return response()->json(['status' => false, 'message' => "Permission denied"], 403);
     }
 
-    $validatedData = $request->validate(['start_date' => 'nullable|date', 'end_date' => 'nullable|date', 'report' => 'required', 'datePeriod' => 'required',
-        ]);
-        $range = $request->all();
-        $datePeriod = $this->filterDateRange($range);
-        // So luong cuoc goi
-        $querySuccess = "select DATE(a.full_time) as day, IFNULL(SUM(duration),0) total_minute, 
-                COUNT(b.id) as num_of_call  from report_days  a 
-                left join sbc.cdr_vendors b on a.full_time= DATE(b.setup_time)   and i_vendor in ( 2,17) 
-                where  full_time between ? and ?   group by day ";
-        $resCallSuccess = DB::select($querySuccess, [$datePeriod->start_date, $datePeriod->end_date]);
-        $queryFailed = "select DATE(a.full_time) as day, COUNT(b.id) as num_of_call  
-from report_days  a left join sbc.cdr_vendors_failed b on a.full_time= DATE(b.setup_time)   and i_vendor in ( 2,17) 
-where  full_time between ? and ? group by day";
-        $resCallFailed = DB::select($queryFailed, [$datePeriod->start_date, $datePeriod->end_date]);
-        $callFailed = array();
-        $dateAvail = array();
-        $callSuccessAmount = array();
-        $callSuccessTime = array();
-        $total_success_call = 0;
-        $total_success_call_time = 0;
-        $total_failed_call = 0;
-        foreach ($resCallSuccess as $key => $val) {
-            $total_success_call += intval($val->num_of_call);
-            $total_success_call_time += ceil(intval($val->total_minute) / 60);
-            array_push($callSuccessAmount, intval($val->num_of_call)?intval($val->num_of_call):0);
-            array_push($callSuccessTime, ceil(intval($val->total_minute) / 60));
-        }
-        foreach ($resCallFailed as $key => $val) {
-            $total_failed_call += intval($val->num_of_call);
-            array_push($callFailed, intval($val->num_of_call)?intval($val->num_of_call):0);
-            array_push($dateAvail, ($val->day));
-            //  array_push($callSuccessTime, intval($val->total_minute));
-        }
-        return response()->json([
-            'total' => ['success' => $total_success_call, 'success_time' => $total_success_call_time, 'failed' => $total_failed_call],
-            'call_success' => $callSuccessAmount, 'call_time' => $callSuccessTime, 'call_failed' => $callFailed, 'date' =>
-                ['start_date' => date('d/m/Y', strtotime($datePeriod->start_date)), 'end_date' => date('d/m/Y', strtotime($datePeriod->end_date))],
-            'date_range' => $dateAvail
-        ]);
-        //postViewReportFlow
-    }
 public function postViewReportFlow(Request $request) {
     $user = $request->user;
     if (!$this->checkEntity($user->id, "VIEW_REPORT_FLOW")) {
@@ -213,26 +195,114 @@ public function postViewReportFlow(Request $request) {
       return response()->json(['status' => false, 'message' => "Permission denied"], 403);
     }
 
+
+
+
     $validatedData = $request->validate(['start_date' => 'nullable|date', 'end_date' => 'nullable|date', 'report' => 'required', 'datePeriod' => 'required',
         ]);
         $range = $request->all();
         $datePeriod = $this->filterDateRange($range);
         // So luong cuoc goi
-        $querySuccess = "select DATE(a.full_time) as day,  total_minute, 
-                num_of_call  from report_days  a 
-					 LEFT JOIN (     
-Select count(*) num_of_call, IFNULL(SUM(duration),0) total_minute,  DATE(setup_time) day  from sbc.cdr_vendors where setup_time
- between   ? and  ?  group by DATE(setup_time)) b 
-on a.full_time= b.day
-    where  full_time between ? and  ?   ";
+
+    $isAm=$this->checkEntity($user->id, "AM");
+    if($isAm)
+    {
+
+        $lstCus= request('customer_ids',[]);
+        $lstDestination= request('destination_types',[]);
+
+
+        $checkCusAms= CustomerAms::where('user_id',$user->id);
+
+        if(count($lstCus)>0)
+        {
+            $checkCusAms= $checkCusAms->whereIn('cus_id',$lstCus);
+        }
+        $res= $checkCusAms->get();
+//
+        if(count($res)==0)
+        {
+            return $this->ApiReturn(['data'=>[], 'count'=>0], true, 'No Customer found', 200);
+        }
+        $lstCusId=[];
+
+        foreach ($res as $am)
+        {
+            $lstCusId[]= $am->cus_id;
+        }
+
+
+        $lstCusIdTxt= implode(",", $lstCusId);
+
+        $lstOperatorType = DB::table("prefix_type_name")->select("prefix_type_id as id", 'name', 'prefix_group');
+        if(count($lstDestination)>0)
+
+        {
+        $lstOperatorType=    $lstOperatorType->whereIn('prefix_type_id',$lstDestination);
+
+        }
+        $resDes=$lstOperatorType->get();
+        $lstPrefixId=[];
+
+        foreach ($resDes as $type)
+        {
+            $lstPrefixId[]= $type->id;
+        }
+
+
+        $operatorFinalTxt= implode(",",$lstPrefixId);
+
+        $querySuccess="SELECT DATE(a.full_time) AS DAY, total_minute, 
+        num_of_call
+        FROM report_days a
+        LEFT JOIN (
+        SELECT COUNT(*) num_of_call, IFNULL(SUM(b.count),0) total_minute, DATE(insert_time) DAY
+        FROM charge_log b
+        WHERE b.insert_time BETWEEN ? AND ? AND cus_id in ($lstCusIdTxt) AND destination_type in($operatorFinalTxt)
+        GROUP BY DATE(insert_time)) b ON a.full_time= b.day
+        WHERE full_time BETWEEN ? AND ? ";
+
+        $queryFailed = "
+        SELECT DATE(a.full_time) AS day, 
+         num_of_call
+        FROM report_days a
+        LEFT JOIN (
+        SELECT COUNT(*) num_of_call, DATE(setup_time) DAY
+        FROM sbc.cdr_vendors_failed
+        WHERE setup_time BETWEEN ? AND ?  AND i_customer in ($lstCusIdTxt)
+        GROUP BY DATE(setup_time)) b ON a.full_time= b.day
+        WHERE full_time BETWEEN ? AND ? ";
+
+    }
+    else
+    {
+        $querySuccess = "
+        SELECT DATE(a.full_time) AS DAY, total_minute, 
+         num_of_call
+        FROM report_days a
+        LEFT JOIN (
+        SELECT COUNT(*) num_of_call, IFNULL(SUM(duration),0) total_minute, DATE(setup_time) DAY
+        FROM sbc.cdr_vendors
+        WHERE setup_time BETWEEN ? AND ?
+        GROUP BY DATE(setup_time)) b ON a.full_time= b.day
+        WHERE full_time BETWEEN ? AND ? ";
+
+        $queryFailed = "
+        SELECT DATE(a.full_time) AS day, 
+         num_of_call
+        FROM report_days a
+        LEFT JOIN (
+        SELECT COUNT(*) num_of_call, DATE(setup_time) DAY
+        FROM sbc.cdr_vendors_failed
+        WHERE setup_time BETWEEN ? AND ?
+        GROUP BY DATE(setup_time)) b ON a.full_time= b.day
+        WHERE full_time BETWEEN ? AND ? ";
+    }
+
+
+
         $resCallSuccess = DB::select($querySuccess, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
-        $queryFailed = "select DATE(a.full_time) as day,  
-                num_of_call  from report_days  a 
-					 LEFT JOIN (     
-Select count(*) num_of_call,    DATE(setup_time) day  from sbc.cdr_vendors_failed where setup_time
- between   ? and  ?  group by DATE(setup_time)) b 
-on a.full_time= b.day
-    where  full_time between ? and  ? ";
+
         $resCallFailed = DB::select($queryFailed, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
         $callFailed = array();
         $dateAvail = array();

@@ -177,6 +177,7 @@ Route::group(['middleware' => ['api', 'cors','logVT']], function () {
         Route::prefix('/report')->group(function () {
             Route::post('/quantity', 'ReportController@postViewReportQuantity');
             Route::post('/flow', 'ReportController@postViewReportFlow');
+            Route::get('/int-flow-params', 'ReportController@getInitFLowReportParam');
             Route::post('/customer', 'ReportController@postViewReportCustomer');
             Route::post('/monthly', 'ReportController@postViewReportMonthlyAudit');
             Route::post('/searchReportGrowth', 'ReportController@postSearchReportGrowth');

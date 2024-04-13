@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-show="selectedReport=='quantity'">
+    <div class="row" ng-show="selectedReport=='quantity' && entity.VIEW_REPORT_QUANTITY">
         <div class="col-md-4">
 
             <table class="table-bordered table-striped table small  table-sm bg-white">
@@ -102,7 +102,7 @@
     </div>
 
 
-    <div class="row" ng-show="selectedReport=='flow'">
+    <div class="row" ng-show="selectedReport=='flow'  && entity.VIEW_REPORT_FLOW ">
         <div class="col-md-4">
 
             <table class="table-bordered table-striped table small  table-sm bg-white">
@@ -140,14 +140,51 @@
         </div>
         <div class="col-md-8">
             <div class="card-body bg-white mt-0 pt-1 pl-2">
+                <div ng-if="entity.AM" class="clearfix" style="width: 100%">
+
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label>Chọn hướng</label>
+                            <ol class="nya-bs-select" ng-model="reportParam.destination_types" multiple=""
+                                selected-text-format ="count>3"
+                                style="width: 100%">
+                                <li nya-bs-option="option in flowParams.operators" data-value="option.id"
+                                    style="padding: 4px 9px">
+                                    <a>
+                                        {{option.name}}
+                                    </a>
+                                    <span class="glyphicon glyphicon-ok check-mark"></span>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="form-group col">
+                            <label>Chọn khách</label>
+                            <ol class="nya-bs-select" ng-model="reportParam.customer_ids"
+                                selected-text-format ="count>3"
+                                multiple="" style="width: 100%">
+                                <li nya-bs-option="option in flowParams.customers" data-value="option.id"
+                                    style="padding: 4px 9px">
+                                    <a>
+                                        {{option.cus_name}}
+                                    </a>
+                                    <span class="glyphicon glyphicon-ok check-mark"></span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+
+                </div>
             <div class=" mb-3  btn-toolbar " role="toolbar" aria-label="Toolbar with button groups">
+
+
                 <div class="btn-group btn-group-sm btn-group-justified  mr-2 mt-2"   ng-if="report.dateRange !='manual'" >
-                    <button class="btn"   ng-class="report.dateRange=='day'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('day')">{{'LBL.TIME_RANGE.DAY'|translate}}</button>
-                    <button class="btn"   ng-class="report.dateRange=='week'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('week')">{{'LBL.TIME_RANGE.WEEK'|translate}}</button>
-                    <button class="btn"   ng-class="report.dateRange=='month'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('month')">{{'LBL.TIME_RANGE.MONTH'|translate}}</button>
-                    <button class="btn"   ng-class="report.dateRange=='quarter'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('quarter')">{{'LBL.TIME_RANGE.QUARTER'|translate}}</button>
-                    <button class="btn"   ng-class="report.dateRange=='year'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('year')">{{'LBL.TIME_RANGE.YEAR'|translate}}</button>
-                    <button class="btn"   ng-class="report.dateRange=='y2d'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRange('y2d')">{{'LBL.TIME_RANGE.Y2D'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='day'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('day')">{{'LBL.TIME_RANGE.DAY'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='week'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('week')">{{'LBL.TIME_RANGE.WEEK'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='month'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('month')">{{'LBL.TIME_RANGE.MONTH'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='quarter'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('quarter')">{{'LBL.TIME_RANGE.QUARTER'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='year'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('year')">{{'LBL.TIME_RANGE.YEAR'|translate}}</button>
+                    <button class="btn"   ng-class="report.dateRange=='y2d'?'btn-primary active':'btn-outline-primary '" ng-click="selectDateRangeFlow('y2d')">{{'LBL.TIME_RANGE.Y2D'|translate}}</button>
                     <button class="btn btn-outline-primary" ng-click="selectDateRange('manual')">{{'LBL.TIME_RANGE.MANUAL'|translate}}</button>
 
                 </div>
@@ -156,10 +193,13 @@
                     <input type="date" ng-model="reportParam.start_date" class="form-control " placeholder="Start date" aria-label="Input group example" aria-describedby="btnGroupAddon">
                     <input type="date" ng-model="reportParam.end_date" class="form-control" placeholder="End date" aria-label="Input group example" aria-describedby="btnGroupAddon">
                     <div class="input-group-append input-group-btn">
-                        <button class="btn btn-outline-primary btn-sm" ng-click="selectDateManual(); ">{{'CRUD.R'|translate}}</button>
+                        <!--<button class="btn btn-outline-primary btn-sm" ng-click="selectDateManual(); ">{{'CRUD.R'|translate}}</button>-->
                         <button class="btn btn-outline-secondary btn-sm" ng-click="report.dateRange = 'month'; "><i class="fa fa-close"></i></button>
 
                     </div>
+                </div>
+                <div class="btn-group btn-group-sm btn-group-justified  mr-2 mt-2">
+                    <button class="btn btn-outline-primary" ng-click="viewFlowReport()"><i class="fa fa-search"></i> Xem báo cáo </button>
                 </div>
 
             </div>
@@ -172,7 +212,7 @@
     </div>
 
 
-    <div class="row" ng-show="selectedReport=='customer'">
+    <div class="row" ng-show="selectedReport=='customer' && entity.VIEW_REPORT_CUSTOMER">
         <div class="col-md-4 ">
 
             <table class="table-bordered table-striped table small  table-sm bg-white">
