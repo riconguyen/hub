@@ -1,7 +1,6 @@
 cms3c.controller('reportController', function ($scope, ApiServices,$filter,loginCheck, ngTableParams) {
 
 	var Token=loginCheck.getEntity().then(function (value) {
-
 		$scope.entity=value.entity;
 		$scope.authUser= value;
 	});

@@ -182,9 +182,6 @@ cms3c.factory('loginCheck', function ($http, $location) {
         },
 		getRole: function () {
 			return $http.post('/api/check?', {token: token});
-
-
-
 		},
         getEntity: function () {
 			return $http.post('/api/check?', {token: token}).then(function (value) {

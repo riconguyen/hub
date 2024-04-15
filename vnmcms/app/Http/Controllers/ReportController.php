@@ -234,6 +234,21 @@ public function postViewReportFlow(Request $request) {
 
         $lstCusIdTxt= implode(",", $lstCusId);
 
+        $listHotlines= Hotlines::whereIn('cus_id',$lstCusId)->get();
+        $lstLines=[];
+
+        $inClauseLines=null;
+
+        if(count($listHotlines)>0)
+        {
+            foreach ($listHotlines as $line)
+            {
+                $lstLines[]= `$line->hotline_number`;
+            }
+            $inClauseLines = "'" . implode("','", $lstLines) . "'";
+        }
+
+
         $lstOperatorType = DB::table("prefix_type_name")->select("prefix_type_id as id", 'name', 'prefix_group');
         if(count($lstDestination)>0)
 
@@ -243,10 +258,13 @@ public function postViewReportFlow(Request $request) {
         }
         $resDes=$lstOperatorType->get();
         $lstPrefixId=[];
+        $objectType= new stdClass();
 
         foreach ($resDes as $type)
         {
             $lstPrefixId[]= $type->id;
+            $objectType->{$type->id}=$type;
+
         }
 
 
@@ -262,16 +280,26 @@ public function postViewReportFlow(Request $request) {
         GROUP BY DATE(insert_time)) b ON a.full_time= b.day
         WHERE full_time BETWEEN ? AND ? ";
 
-        $queryFailed = "
+        $querySuccessByType="SELECT COUNT(*) num_of_call, IFNULL(SUM(b.count),0) total_minute, destination_type
+        FROM charge_log b
+        WHERE b.insert_time BETWEEN ? AND ? AND cus_id in ($lstCusIdTxt) AND destination_type in($operatorFinalTxt)
+        group by destination_type; 
+        ";
+
+        if($inClauseLines)
+        {
+            $queryFailed = "
         SELECT DATE(a.full_time) AS day, 
          num_of_call
         FROM report_days a
         LEFT JOIN (
         SELECT COUNT(*) num_of_call, DATE(setup_time) DAY
         FROM sbc.cdr_vendors_failed
-        WHERE setup_time BETWEEN ? AND ?  AND i_customer in ($lstCusIdTxt)
+        WHERE setup_time BETWEEN ? AND ?  AND cli in ($inClauseLines)
         GROUP BY DATE(setup_time)) b ON a.full_time= b.day
         WHERE full_time BETWEEN ? AND ? ";
+        }
+
 
     }
     else
@@ -302,6 +330,7 @@ public function postViewReportFlow(Request $request) {
 
 
         $resCallSuccess = DB::select($querySuccess, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
+        $resCallSuccessByType = DB::select($querySuccessByType, [$datePeriod->start_date, $datePeriod->end_date]);
 
         $resCallFailed = DB::select($queryFailed, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
         $callFailed = array();
@@ -311,6 +340,15 @@ public function postViewReportFlow(Request $request) {
         $total_success_call = 0;
         $total_success_call_time = 0;
         $total_failed_call = 0;
+
+
+        foreach ($resCallSuccessByType as $item)
+        {
+            if(isset($objectType->{$item->destination_type}))
+            {
+                $item->destination_type_name=$objectType->{$item->destination_type};
+            }
+        }
         foreach ($resCallSuccess as $key => $val) {
             $total_success_call += intval($val->num_of_call);
             $total_success_call_time += ceil(intval($val->total_minute) / 60);
@@ -324,10 +362,12 @@ public function postViewReportFlow(Request $request) {
             //  array_push($callSuccessTime, intval($val->total_minute));
         }
         return response()->json([
-            'total' => ['success' => $total_success_call, 'success_time' => $total_success_call_time, 'failed' => $total_failed_call],
+            'total' => ['success' => $total_success_call, 'success_time' => $total_success_call_time,
+                'failed' => $total_failed_call],
             'call_success' => $callSuccessAmount, 'call_time' => $callSuccessTime, 'call_failed' => $callFailed, 'date' =>
                 ['start_date' => date('d/m/Y', strtotime($datePeriod->start_date)), 'end_date' => date('d/m/Y', strtotime($datePeriod->end_date))],
-            'date_range' => $dateAvail
+            'date_range' => $dateAvail,
+            'success_by_type'=>$resCallSuccessByType
         ]);
         //postViewReportFlow
     }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/vnmcms/app" isTestSource="false" packagePrefix="App\" />
+      <sourceFolder url="file://$MODULE_DIR$/vnmcms/tests" isTestSource="true" packagePrefix="Tests\" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/dnoegel/php-xdg-base-dir" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/doctrine/inflector" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/doctrine/lexer" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/erusev/parsedown" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/fideloper/proxy" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/filp/whoops" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/fzaninotto/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/hamcrest/hamcrest-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/jakub-onderka/php-console-color" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/jakub-onderka/php-console-highlighter" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/laravel/framework" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/laravel/tinker" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/league/flysystem" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/mockery/mockery" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/monolog/monolog" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/mtdowling/cron-expression" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/namshi/jose" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/nesbot/carbon" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpdocumentor/type-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpspec/prophecy" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/php-token-stream" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/phpunit/phpunit-mock-objects" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/psr/container" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/psr/simple-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/psy/psysh" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/ramsey/uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/swiftmailer/swiftmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/css-selector" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/debug" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/http-kernel" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/polyfill-php56" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/polyfill-php70" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/polyfill-util" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/routing" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/thanks" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/translation" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/symfony/var-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/tijsverkoyen/css-to-inline-styles" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/twbs/bootstrap" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/tymon/jwt-auth" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/vlucas/phpdotenv" />
+      <excludeFolder url="file://$MODULE_DIR$/vnmcms/vendor/webmozart/assert" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
