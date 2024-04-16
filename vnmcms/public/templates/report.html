@@ -123,18 +123,31 @@
                     <th class="text-right">Cuộc gọi</th>
                     <th class="text-right">Sản lượng <sup class="text-muted">phút</sup></th>
                 </tr>
-                <tr>
-                    <td>Cuộc gọi thành công</td><td class="text-right">{{report.flow.total.success|number:0}}</td>
-                    <td class="text-right">{{report.flow.total.success_time|number:0}} </td>
-                </tr>
+
                 <tr>
                     <td>Cuộc gọi không gặp khách</td><td class="text-right">{{report.flow.total.failed|number:0}}</td><td class="text-right text-muted">N/A</td>
                 </tr>
                 <tr>
-                    <th>Tổng</th><th class="text-right">{{(report.flow.total.failed + report.flow.total.success)|number:0}}</th>
+                    <th>Tổng</th>
+                    <th class="text-right">{{(report.flow.total.failed + report.flow.total.success)|number:0}}</th>
                     <th class="text-right">{{report.flow.total.success_time|number:0}}</th>
                 </tr>
 
+                <tr>
+                    <th>Tỉ lệ cuộc gọi thất bại</th>
+                    <td colspan="2" class="text-right">{{(report.flow.total.failed/(report.flow.total.failed + report.flow.total.success))*100|number:2}}</td>
+
+
+                </tr>
+                <tr>
+                    <th>Cuộc gọi thành công</th><td class="text-right" colspan="2">{{report.flow.total.success|number:0}}</td>
+
+                </tr>
+
+                <tr ng-repeat="type in report.flow.success_by_type" ng-if="entity.AM">
+                    <td>+ {{type.destination_type_name.name}}</td>
+                    <td colspan="2" class="text-right">{{type.num_of_call|number:0}}</td>
+                </tr>
 
             </table>
         </div>
