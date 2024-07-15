@@ -195,7 +195,7 @@ public function postViewReportFlow(Request $request) {
       return response()->json(['status' => false, 'message' => "Permission denied"], 403);
     }
 
-
+    $querySuccessByType= null;
 
 
     $validatedData = $request->validate(['start_date' => 'nullable|date', 'end_date' => 'nullable|date', 'report' => 'required', 'datePeriod' => 'required',
@@ -234,7 +234,7 @@ public function postViewReportFlow(Request $request) {
 
         $lstCusIdTxt= implode(",", $lstCusId);
 
-        $listHotlines= Hotlines::whereIn('cus_id',$lstCusId)->get();
+        $listHotlines= DB::select("select * from hot_line_config where cus_id in ($lstCusIdTxt) ");
         $lstLines=[];
 
         $inClauseLines=null;
@@ -243,11 +243,11 @@ public function postViewReportFlow(Request $request) {
         {
             foreach ($listHotlines as $line)
             {
-                $lstLines[]= `$line->hotline_number`;
+                $lstLines[]= $line->hotline_number;
             }
             $inClauseLines = "'" . implode("','", $lstLines) . "'";
         }
-
+//        return ['a'=>$inClauseLines];
 
         $lstOperatorType = DB::table("prefix_type_name")->select("prefix_type_id as id", 'name', 'prefix_group');
         if(count($lstDestination)>0)
@@ -301,6 +301,7 @@ public function postViewReportFlow(Request $request) {
         }
 
 
+
     }
     else
     {
@@ -330,7 +331,26 @@ public function postViewReportFlow(Request $request) {
 
 
         $resCallSuccess = DB::select($querySuccess, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
-        $resCallSuccessByType = DB::select($querySuccessByType, [$datePeriod->start_date, $datePeriod->end_date]);
+
+    if($isAm )
+    {
+        if($querySuccessByType)
+        {
+            $resCallSuccessByType = DB::select($querySuccessByType, [$datePeriod->start_date, $datePeriod->end_date]);
+        }
+        else
+        {
+            $resCallSuccessByType=[];
+        }
+
+    }
+    else
+    {
+
+        $resCallSuccessByType=[];
+
+    }
+
 
         $resCallFailed = DB::select($queryFailed, [$datePeriod->start_date, $datePeriod->end_date,$datePeriod->start_date, $datePeriod->end_date]);
         $callFailed = array();
