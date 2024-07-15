@@ -43,7 +43,7 @@ function ngAlias($compile) {
 }
 
 
-var cms3c = angular.module("cms3c", ['ngRoute', 'pascalprecht.translate','ngTable','nya.bootstrap.select','ngTagsInput']);
+const cms3c = angular.module("cms3c", ['ngRoute', 'pascalprecht.translate', 'ngTable', 'nya.bootstrap.select', 'ngTagsInput']);
 
 cms3c.directive('focusOn', function() {
 	return function(scope, elem, attr) {

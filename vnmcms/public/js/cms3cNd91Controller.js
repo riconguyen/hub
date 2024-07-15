@@ -1,14 +1,14 @@
-cms3c.controller('nd91Controller', function ($scope, ApiServices,$filter,loginCheck, ApiUsers, ngTableParams, $window) {
+cms3c.controller('nd91Controller', function ($scope, ApiServices,$filter,loginCheck, ApiUsers, ngTableParams) {
 
 	$scope.entity={};
-	var Token=loginCheck.getEntity().then(function (value) {
+	loginCheck.getEntity().then(function (value) {
 		$scope.entity = value.entity;
 		$scope.authUser = value;
 		$scope.lstNavNd91 = [
-			{id: "dnc", title: "Cấu hình ND91", permission: $scope.entity.ND91_CONFIG ? true : false},
-			{id: "quota", title: "Hạn mức", permission: $scope.entity.ND91_CONFIG ? true : false},
-			{id: "time_range", title: "Thời gian", permission: $scope.entity.ND91_CONFIG ? true : false},
-			{id: "report", title: "Báo cáo", permission: $scope.entity.ND91_REPORT ? true : false},
+			{id: "dnc", title: "Cấu hình ND91", permission: !!$scope.entity.ND91_CONFIG},
+			{id: "quota", title: "Hạn mức", permission: !!$scope.entity.ND91_CONFIG},
+			{id: "time_range", title: "Thời gian", permission: !!$scope.entity.ND91_CONFIG},
+			{id: "report", title: "Báo cáo", permission: !!$scope.entity.ND91_REPORT},
 		]
 	});
 	$scope.initNd91 = function () {
@@ -17,7 +17,7 @@ cms3c.controller('nd91Controller', function ($scope, ApiServices,$filter,loginCh
 			for (var i = 0; i < $scope.lstDNCConfig.length; i++) {
 				$scope.lstDNCConfig[i].active = parseInt($scope.lstDNCConfig[i].active);
 			}
-		}, function (reason) {
+		}, reason => {
 			$.jGrowl("Không thể tải cấu hình")
 		})
 	}

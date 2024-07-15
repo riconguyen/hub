@@ -17,20 +17,22 @@
 <link rel="stylesheet" href="<?=asset('css/ng-table.min.css')?>"/>
 <link rel="stylesheet" href="<?=asset('css/font-awesome.min.css')?>"/>
 <link rel="stylesheet" href="<?=asset('css/3ccms.css')?>?v=20181129"/>
+<link rel="stylesheet" href="<?=asset('css/nya-bs-select.css')?>?v=20181129"/>
 <link rel="stylesheet" href="<?=asset('css/jquery.jgrowl.min.css')?>?v=20181129"/>
 <link rel="stylesheet" href="<?=asset('css/bootstrap-datetimepicker.min.css')?>?v=20181129"/>
+<link rel="stylesheet" href="<?=asset('css/ng-tags-input.min.css')?>?v=20181129"/>
+<link rel="stylesheet" href="<?=asset('css/ng-tags-input.bootstrap.min.css')?>?v=20181129"/>
 
 <script>
     localStorage.setItem('lang', '<?php echo e($lang); ?>');
-    var SERVER_PROFILE=<?php echo e(config("server.server_profile")); ?>
-
-    var SERVER_PROFILE_BACKUP=<?php echo e(config("server.server_profile_backup")); ?>
-
+    var SERVER_PROFILE=<?php echo e(config("server.server_profile")); ?>;
+    var SERVER_PROFILE_BACKUP=<?php echo e(config("server.server_profile_backup")); ?>;
 </script>
 <script src="<?= asset('js/jquery-2.2.4.min.js') ?>"></script>
 <script src="<?= asset('js/popper.min.js') ?>"></script>
 <script src="<?= asset('js/angular.min.js') ?>"></script>
 <script src="<?= asset('js/angular-route.min.js') ?>"></script>
+<script src="<?= asset('js/nya-bs-select.min.js') ?>"></script>
 
 <script src="<?= asset('js/cms3c.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cRouting.js') ?>?v=20181129"></script>
@@ -39,12 +41,14 @@
 <script src="<?= asset('js/cms3cCustomerController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cLogController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cUserController.js') ?>?v=20181129"></script>
+<script src="<?= asset('js/cms3cSipV2Controller.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cChargeController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cNd91Controller.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cBlackListController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3c-api-services.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/angular-translate.min.js') ?>"></script>
 <script src="<?= asset('js/angular-translate-loader-static-files.min.js') ?>"></script>
+<script src="<?= asset('js/dist_xlsx.full.min.js') ?>"></script>
 
 <script src="<?= asset('js/bootstrap.min.js') ?>"></script>
 
@@ -52,6 +56,7 @@
 <script src="<?= asset('js/jquery.jgrowl.min.js') ?>"></script>
 
 <script src="<?= asset('js/highcharts.js') ?>"></script>
+<script src="<?= asset('js/ng-tags-input.min.js') ?>"></script>
 
 <link rel="stylesheet"; href="<?= asset('css/ng-table.min.css') ?>">
 <script src="<?= asset('js/ng-table.min02.js') ?>"></script>
@@ -97,6 +102,10 @@
 
             <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/sip'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('sip');" href="">{{'NAV.SIP_TRUNK'|translate}}</a>
+            </li>
+            <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
+                <a class="nav-link text-uppercase  "     ng-class="nav=='/sipv2'?'active':''"  data-toggle="collapse"
+                   data-target="#navbarSupportedContent"  ng-click="switchNav('sipv2');" href="">Call Tracking V2</a>
             </li>
             <li class="nav-item" ng-if="entity.BLACK_LIST">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/blacklist'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('blacklist');" href="">{{'NAV.BLACK_LIST'|translate}}</a>

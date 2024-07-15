@@ -25,8 +25,8 @@
 
 <script>
     localStorage.setItem('lang', '{{$lang}}');
-    var SERVER_PROFILE={{config("server.server_profile")}}
-    var SERVER_PROFILE_BACKUP={{config("server.server_profile_backup")}}
+    var SERVER_PROFILE={{config("server.server_profile")}};
+    var SERVER_PROFILE_BACKUP={{config("server.server_profile_backup")}};
 </script>
 <script src="<?= asset('js/jquery-2.2.4.min.js') ?>"></script>
 <script src="<?= asset('js/popper.min.js') ?>"></script>
@@ -41,6 +41,7 @@
 <script src="<?= asset('js/cms3cCustomerController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cLogController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cUserController.js') ?>?v=20181129"></script>
+<script src="<?= asset('js/cms3cSipV2Controller.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cChargeController.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cNd91Controller.js') ?>?v=20181129"></script>
 <script src="<?= asset('js/cms3cBlackListController.js') ?>?v=20181129"></script>
@@ -101,6 +102,10 @@
 
             <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/sip'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('sip');" href="">@{{'NAV.SIP_TRUNK'|translate}}</a>
+            </li>
+            <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
+                <a class="nav-link text-uppercase  "     ng-class="nav=='/sipv2'?'active':''"  data-toggle="collapse"
+                   data-target="#navbarSupportedContent"  ng-click="switchNav('sipv2');" href="">Call Tracking V2</a>
             </li>
             <li class="nav-item" ng-if="entity.BLACK_LIST">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/blacklist'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('blacklist');" href="">@{{'NAV.BLACK_LIST'|translate}}</a>

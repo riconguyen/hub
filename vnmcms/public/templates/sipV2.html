@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="row mt-2">
+        <div class="col">
+            <h4 class="display-4 mt-2 pl-1 ">KIỂM TRA THÔNG TIN CUỘC GỌI</h4>
+            <form class="form-group" ng-submit="onSearchSip();">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Loại </label>
+                       <select ng-model="sipParam.type"
+                               class="form-control"
+                               ng-options="item.id as item.label  for  item in lstCallTypes">
+
+                       </select>
+                    </div>   <div class="col">
+                        <label>Từ ngày </label>
+                        <input type="date" ng-model="sipParam.start_date" class="form-control" placeholder="Ngày bắt đầu"/>
+                    </div>
+
+                    <div class="col">
+                        <label>Đến ngày</label>
+                        <input type="date" ng-model="sipParam.end_date" class="form-control" placeholder="Ngày kết thúc"/>
+                    </div>
+                    <div class="col">
+                        <label>Enterprise Number <span class="text-danger">*</span> </label>
+                        <input type="text" ng-model="sipParam.enterprise_number" list="listOwnerCustomer" class="form-control" placeholder="Điền số Enterprise của khách"/>
+                        <datalist id="listOwnerCustomer">
+                            <option ng-repeat="cus in lstCustomers" value="{{ cus }}">
+                        </datalist>
+                    </div>
+                    <div class="col">
+                        <label>Số cần kiểm tra  <span class="text-danger">*</span> </label>
+                        <input type="text" ng-model="sipParam.caller" class="form-control" placeholder="Số thuê bao cần kiểm tra"/>
+                    </div>
+
+                    <div class="col"  style="padding-top: 2rem !important;">
+                        <button ng-click="onSearch()" class="btn btn-primary"><i class="fa fa-search"></i> Tìm </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+            <table ng-table-dynamic="sbcSipLog with sipLogCols"
+
+                   class="tickets table table-condensed table-bordered table-striped small"
+                   style="margin-top: 10px;" template-header="sipLogTableParams_template">
+
+
+
+                <tr ng-if="$data.length == 0 || $data == undefined">
+                    <td colspan="100" style="display:table-cell !important;text-align:center">
+                        {{'LBL_NO_DATA_FOUND'|translate}}
+                    </td>
+                </tr>
+                <!-- // FIX 20180905 -->
+                <tr ng-repeat="row in $data track by $index" ng-if="$data.length > 0" >
+                    <td ng-repeat="col in sipLogCols"  ng-class="col.field=='duration'?'text-right':''"  >
+                        <div ng-if="col.field=='nbr'">
+                            <button class="btn btn-sm btn-outline-secondary" ng-class="row.checkedInfo.state?'btn-outline-success':'btn-outline-secondary'"
+                                    ng-click="onCheckNumberRouting(row);" title="{{row.checkedInfo.state?row.checkedInfo.placeHolder:'Kiểm tra chuyển mạng giữ số'}}">
+                                <i ng-if="!row.checkedInfo.state" class="fa"
+                                   ng-class="row.checkedInfo.loading?'fa-refresh fa-spin':'fa-check'"
+                                ></i>
+                                <i ng-if="row.checkedInfo.state" class="fa  {{row.checkedInfo.icon}}"          ></i>
+                            </button>
+                        </div>
+                        <div ng-if="col.field=='direction'">
+
+                            <span ng-if="currentSip.caller==row.CLI">
+                                <i class="fa fa-sign-out"  ng-class="call.duration?'text-success':'text-danger'" title="{{'SIP.CALL.DIRECTION.OUT'|translate}}"></i>
+                                {{'SIP.CALL.DIRECTION.OUT'|translate}} {{row.duration?'':'không gặp'}}</span>
+                            <span ng-if="currentSip.caller==row.CLD">
+                                <i class="fa fa-sign-in " ng-class="call.duration?'text-primary':'text-danger'"  title="{{'SIP.CALL.DIRECTION.IN'|translate}}"></i>
+                                {{'SIP.CALL.DIRECTION.IN'|translate}} {{row.duration?'':'không gặp'}}</span>
+
+                        </div>
+
+
+                        <span ng-if="col.field =='charge_status'"  class="text-info">
+                                {{'SIP.CALL.CHARGE_STATUS_VAL.'+row.charge_status|translate}}
+                            </span>
+                        <span ng-if="col.field =='reject_cause'"  class="text-info"
+                              title="{{'SIP_ERRORCODE.'+row[col.field]|translate}}">{{'SIP_ERRORCODE.'+row[col.field]|translate}} </span>
+                        <a href="" ng-if="col.field =='setup_time'" ng-click="viewCallDebugPython(row);"   >{{row[col.field]}}</a>
+                        <span ng-if="col.field !='charge_status' && col.field !='reject_cause' && col.field !='setup_time' && col.field!='direction'&& col.field!='nrb'"  >{{row[col.field]}}</span>
+
+                    </td>
+                </tr>
+
+
+
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+<script id="sipLogTableParams_template" type="text/ng-template">
+    <tr>
+        <th ng-repeat="column in sipLogCols" class="header text-muted"  ng-class="column.field=='duration'?'text-right':''"  >
+            {{ column.title|translate}}  </th>
+    </tr>
+</script>

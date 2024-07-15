@@ -162,6 +162,7 @@ Route::group(['middleware' => ['api', 'cors','logVT']], function () {
             Route::post('/postSearchSip', 'SipController@postSearchSip');
 
             Route::post('/postCallLog/{id}', 'SipController@postCallLog');
+            Route::post('/search-call-log', 'SipV2Controller@postSearchCallLog');
             Route::get('/getSipConfigByCaller/{id}', 'SipController@getSipConfigByCaller');
             Route::post('/putDeleteSipByCaller', 'SipController@putDeleteSipByCaller');
           Route::post('/postCheckNumberRouting', 'SipController@postCheckNumberRouting');

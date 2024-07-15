@@ -25,6 +25,9 @@ cms3c.config(['$routeProvider', '$httpProvider',
         }).when('/sip', {
             templateUrl: '/templates/sip.html',
             controller: 'sipController'
+        }).when('/sipv2', {
+            templateUrl: '/templates/sipv2.html',
+            controller: 'sipV2Controller'
         }).when('/addSip', {
             templateUrl: '/templates/addSip.html',
             controller: 'sipControllerAdd'

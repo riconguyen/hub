@@ -94,6 +94,10 @@ cms3c.factory('ApiServices', function($http,loginCheck){
             return $http({method:'post',headers:headers, url:ApiUrl+'/api/sip/postCallLog/'+data.caller, data:data});
         },
 
+        searchCallLog:function (data) {
+            return $http({method:'post',headers:headers, url:ApiUrl+'/api/sip/searchCallog', data:data});
+        },
+
         getSipConfigByCaller:function (id) {
             return $http({method:'get',headers:headers, url:ApiUrl+'/api/sip/getSipConfigByCaller/'+id});
         },
