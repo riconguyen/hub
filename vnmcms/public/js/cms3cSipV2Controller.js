@@ -135,10 +135,10 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         if (!$scope.sbcSipLog) {
             $scope.sbcSipLog = new ngTableParams({
                     page: 1, // show first page
-                    count:5   // count per page
+                    count:20   // count per page
 
                 }, {
-                    counts: [5,10,20,50,100],
+                    counts: [20,50,100],
                     getData: function ($defer, params) {
                         $scope.sipLogParam.page = params.page();
                         $scope.sipLogParam.count = params.count();
