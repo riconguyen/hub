@@ -754,7 +754,12 @@ where a.direction= ? ";
          a.disconnect_time, 
          a.disconnect_cause, 
          a.from_network_ip, 
-         a.des_network_ip, NULL AS quality_mos, NULL AS quality_largest_jb, NULL AS quality_jitter_burst_rate, NULL AS duration, NULL AS charge_status,
+         a.des_network_ip, 
+         NULL AS quality_mos,
+         NULL AS quality_largest_jb,
+          NULL AS quality_jitter_burst_rate, 
+          NULL AS duration,
+           NULL AS charge_status,
          'failed' AS state,
          
           x.call_brandname,

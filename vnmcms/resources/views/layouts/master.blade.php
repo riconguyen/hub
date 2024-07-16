@@ -103,7 +103,7 @@
             <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/sip'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('sip');" href="">@{{'NAV.SIP_TRUNK'|translate}}</a>
             </li>
-            <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
+            <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING_V2">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/sipv2'?'active':''"  data-toggle="collapse"
                    data-target="#navbarSupportedContent"  ng-click="switchNav('sipv2');" href="">Call Tracking V2</a>
             </li>

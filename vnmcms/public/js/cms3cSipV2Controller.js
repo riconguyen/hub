@@ -4,6 +4,14 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         $scope.authUser = value;
         $scope.entity = value.entity;
     });
+    $scope.lstCustomers=[]
+
+    ApiServices.getRecentCustomers().then(result=>{
+
+        (result.data?.lstData).map(item=>{
+            $scope.lstCustomers.push(item.enterprise_number)
+        })
+    })
 
     $scope.lstCallTypes= [
         {"id":1,label:"Gọi thành công"},
@@ -26,14 +34,13 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         {field: "state", title: "Trạng thái", sortable: "state", show: true},
         {field: "reject_cause", title: "Mã lỗi (*)", sortable: "reject_cause", show: true},
         {field: "call_brandname", title: "Brandname", sortable: "call_brandname", show: true},
-        {field: "nbr", title: "Tác vụ", sortable: "nbr", show: true}
+        // {field: "nbr", title: "Tác vụ", sortable: "nbr", show: true}
 
 
     ];
 
 
 
-    $scope.lstCustomers=['0983311212','098744343121']
 
     $scope.onSearch= ()=>{
 
@@ -83,7 +90,7 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
 
         let postData={
             start_date:startDate.format("YYYY-MM-DD 00:00:00"),
-            end_date: endDate.format("YYYY-MM-DD HH:mm:ss"),
+            end_date: endDate.format("YYYY-MM-DD 23:59:59"),
             enterprise_number: $scope.sipParam.enterprise_number,
             caller: $scope.sipParam.caller,
             type:$scope.sipParam.type,
@@ -96,7 +103,23 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         $scope.onSearchLog(postData)
     };
 
-
+    $scope.viewCallDebugPython = function (data) {
+        $scope.currentCall = data;
+        if ($scope.userRole == 1) {
+            $scope.currentCall.loading = false;
+            var data2 = {"cld": data.CLD};
+            res = ApiServices.callDebugPython(data.CLI, data2);
+            res.then(function (data) {
+                $("#sipData").html("<pre>" + data.data + "</pre>");
+                $scope.currentCall.loading = true;
+            })
+        }
+        else
+        {
+            $scope.currentCall.loading = true;
+        }
+        $("#callDialogDebugV2").modal('show');
+    }
 
     $scope.onSearchLog= function(param)
     {
@@ -112,10 +135,10 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         if (!$scope.sbcSipLog) {
             $scope.sbcSipLog = new ngTableParams({
                     page: 1, // show first page
-                    count:10   // count per page
+                    count:5   // count per page
 
                 }, {
-                    counts: [10,20,50,100],
+                    counts: [5,10,20,50,100],
                     getData: function ($defer, params) {
                         $scope.sipLogParam.page = params.page();
                         $scope.sipLogParam.count = params.count();

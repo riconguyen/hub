@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid"  ng-if="entity.VIEW_SIP_TRACKING_V2">
     <div class="row mt-2">
         <div class="col">
             <h4 class="display-4 mt-2 pl-1 ">KIỂM TRA THÔNG TIN CUỘC GỌI</h4>
@@ -21,15 +21,16 @@
                         <input type="date" ng-model="sipParam.end_date" class="form-control" placeholder="Ngày kết thúc"/>
                     </div>
                     <div class="col">
-                        <label>Enterprise Number <span class="text-danger">*</span> </label>
-                        <input type="text" ng-model="sipParam.enterprise_number" list="listOwnerCustomer" class="form-control" placeholder="Điền số Enterprise của khách"/>
+                        <label>Số đại diện <span class="text-danger">*</span> </label>
+                        <input type="text" ng-model="sipParam.enterprise_number" list="listOwnerCustomer" class="form-control"
+                               placeholder="Điền số đại diện của khách"/>
                         <datalist id="listOwnerCustomer">
                             <option ng-repeat="cus in lstCustomers" value="{{ cus }}">
                         </datalist>
                     </div>
                     <div class="col">
                         <label>Số cần kiểm tra  <span class="text-danger">*</span> </label>
-                        <input type="text" ng-model="sipParam.caller" class="form-control" placeholder="Số thuê bao cần kiểm tra"/>
+                        <input type="text" ng-model="sipParam.caller" class="form-control" placeholder="Số thuê bao hoặc hotline cần kiểm tra"/>
                     </div>
 
                     <div class="col"  style="padding-top: 2rem !important;">
@@ -96,6 +97,58 @@
         </div>
     </div>
 </div>
+
+
+<!--Modal call tracking -->
+<div class="modal fade" id="callDialogDebugV2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title" id="exampleModalLabel" >
+                 {{'SIP.CALL.TRACKING'|translate}}<br>
+                    <B>{{currentCall.CLI}} <i class="fa " ng-class="currentCall.duration?'text-success fa-arrow-right':'text-danger fa-times'"></i>  {{currentCall.CLD}}</B>
+                    </span>
+
+
+                <button type="button" class="close" data-dismiss="modal" ng-click="currentCall===null" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body call-tracking">
+
+
+
+                <table class="table-sm table table-striped small table-bordered" ng-class="currentCall.duration?'':'table-danger'">
+                    <tr><th>{{'SIP.CALL.SETUP_TIME'|translate}}</th><td>{{currentCall.setup_time}}</td><th>{{'SIP.CALL.CONNECT_TIME'|translate}}</th><td>{{currentCall.connect_time}}</td><th>{{'SIP.CALL.DISCONNECT_TIME'|translate}}</th><td>{{currentCall.disconnect_time}}</td></tr>
+                    <tr><th>{{'SIP.CALL.DURATION'|translate}}</th><td>{{currentCall.duration}}</td><th>{{'SIP.CALL.DISCONNECT_CAUSE'|translate}}</th><td >{{currentCall.disconnect_cause|translate}}</td><th>{{'SIP.CALL.CHARGE_STATUS'|translate}}</th>
+                        <td > <span ng-if="currentCall.charge_status">{{'SIP.CALL.CHARGE_STATUS_VAL.'+currentCall.charge_status|translate}} </span></td></tr>
+                    <tr><th>{{'SIP.CALL.FROM_NETWORK_IP'|translate}}</th><td>{{currentCall.from_network_ip}}</td><th>{{'SIP.CALL.TO_NETWORK_IP'|translate}}</th><td colspan="3">{{currentCall.des_network_ip}}</td></tr>
+                    <tr><th>{{'SIP.CALL.QUALITY_MOS'|translate}}</th><td>{{currentCall.quality_mos}}</td><th>{{'SIP.CALL.QUALITY_LARGEST_JB'|translate}}</th><td  >{{currentCall.quality_largest_jb}}</td><th>{{'SIP.CALL.QUALITY_JITTER_BURST_RATE'|translate}}</th><td  >{{currentCall.quality_jitter_burst_rate}}</td></tr>
+
+                </table>
+                <div class="mt-1 small">  {{'SIP.CALL.ID'|translate}} <abbr class="text-muted">{{currentCall.call_id}}</abbr></div>
+                <div class="card mt-2" ng-if="userRole==-1">
+                    <div class="card-header">CALL DEBUGGING</div>
+                    <div class="card-body pt-5 pb-5 text-center" ng-if="!currentCall.loading">
+                        <div class="loader"></div>
+
+                    </div>
+                    <div class="card-body small" ng-show="currentCall.loading">
+                        <div id="sipData"></div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script id="sipLogTableParams_template" type="text/ng-template">
     <tr>
