@@ -101,11 +101,13 @@
             </li>
 
             <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING">
-                <a class="nav-link text-uppercase  "     ng-class="nav=='/sip'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('sip');" href="">@{{'NAV.SIP_TRUNK'|translate}}</a>
+                <a class="nav-link text-uppercase  "
+                   ng-class="nav=='/sip'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('sip');" href="">
+                    Call Tracking Hotline</a>
             </li>
             <li class="nav-item" ng-if="entity.VIEW_SIP_TRACKING_V2">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/sipv2'?'active':''"  data-toggle="collapse"
-                   data-target="#navbarSupportedContent"  ng-click="switchNav('sipv2');" href="">Call Tracking V2</a>
+                   data-target="#navbarSupportedContent"  ng-click="switchNav('sipv2');" href=""> Call Tracking Pool</a>
             </li>
             <li class="nav-item" ng-if="entity.BLACK_LIST">
                 <a class="nav-link text-uppercase  "     ng-class="nav=='/blacklist'?'active':''"  data-toggle="collapse" data-target="#navbarSupportedContent"  ng-click="switchNav('blacklist');" href="">@{{'NAV.BLACK_LIST'|translate}}</a>

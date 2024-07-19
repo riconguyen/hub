@@ -20,7 +20,7 @@
                         <label>Đến ngày</label>
                         <input type="date" ng-model="sipParam.end_date" class="form-control" placeholder="Ngày kết thúc"/>
                     </div>
-                    <div class="col">
+                    <div class="col" ng-show="lstCustomers.length>1">
                         <label>Số đại diện <span class="text-danger">*</span> </label>
                         <input type="text" ng-model="sipParam.enterprise_number" list="listOwnerCustomer" class="form-control"
                                placeholder="Điền số đại diện của khách"/>

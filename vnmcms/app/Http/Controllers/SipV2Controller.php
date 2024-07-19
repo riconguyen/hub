@@ -89,14 +89,35 @@ class SipV2Controller extends Controller
 
         $start= ($page-1)*$count;
 
+        $isAm=$this->checkEntity($user->id, "AM");
+        $lstCus=[];
+        if($isAm)
+        {
+            $checkCusAms= CustomerAms::where('user_id',$user->id)->select('cus_id')->get();
+
+            foreach ($checkCusAms as $am)
+            {
+                $lstCus[]= $am->cus_id;
+            }
+
+        }
 
 
-        $sqlHotline= "select hlc.hotline_number  from  hot_line_config hlc where cus_id= (select id from customers where enterprise_number =? and blocked in (0,1))  and status in (0,1) ";
+        $customer= Customers::where('enterprise_number', $enterpriseNumber)->whereIn('blocked',[0,1])->first();
+
+
+
+        $sqlHotline= "select hlc.hotline_number  from  hot_line_config hlc where cus_id= (select id from customers where enterprise_number =? and blocked in (0,1) ";
+        if(count($lstCus)>0)
+        {
+            $lstCusTxt= implode(",", $lstCus);
+
+            $sqlHotline .= " AND id in ($lstCusTxt)";
+        }
+
+        $sqlHotline .=" )  and status in (0,1)";
 
         $lstHotline= DB::select($sqlHotline, [$enterpriseNumber]);
-
-
-
 
 
         if(count($lstHotline)==0)
@@ -105,7 +126,7 @@ class SipV2Controller extends Controller
             return $this->ApiReturn(['enterprise_number'=>['message'=>'Not found customers or any valid hotlines on '.$enterpriseNumber]], false, 'The given data was invalid', 422);
         }
 
-        $customer= Customers::where('enterprise_number', $enterpriseNumber)->whereIn('blocked',[0,1])->first();
+
 
         $lstHotlineTxt= [];
         foreach ($lstHotline as $line)

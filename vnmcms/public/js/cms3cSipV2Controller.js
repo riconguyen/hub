@@ -5,19 +5,30 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
         $scope.entity = value.entity;
     });
     $scope.lstCustomers=[]
+    $scope.sipParam={enterprise_number:"", caller:"", start_date:"", end_date:"", type:1}
 
-    ApiServices.getRecentCustomers().then(result=>{
+    ApiServices.getRecentCustomers().then(result => {
 
-        (result.data?.lstData).map(item=>{
+        (result.data?.lstData).map(item => {
+
             $scope.lstCustomers.push(item.enterprise_number)
+
+
         })
+
+
+        if ($scope.lstCustomers.length > 0) {
+            $scope.sipParam.enterprise_number = angular.copy($scope.lstCustomers[0]);
+        }
+
+
     })
 
     $scope.lstCallTypes= [
         {"id":1,label:"Gọi thành công"},
         {"id":2,label:"Gọi không thành công"},
     ]
-    $scope.sipParam={enterprise_number:"", caller:"", start_date:"", end_date:"", type:1}
+
     let date= new Date();
     $scope.sipParam.start_date= new Date(date.getFullYear(), date.getMonth(), 1);
     $scope.sipParam.end_date= new Date();
@@ -161,8 +172,10 @@ cms3c.controller('sipV2Controller', function ($scope, ApiServices,$filter,  $loc
                                 $defer.resolve($scope.lstLog);
                             }, function (response) {
                                 $("#loading").modal("hide");
+                                $.jGrowl(response.data.message, {theme:'error'});
                                 $scope.lstLog = [];
                                 $scope.lstLogCount = -1;
+
                             }
                         );
                     }
